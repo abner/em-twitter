@@ -19,7 +19,8 @@ module EventMachine
       :oauth              => {},
       :basic              => {},
       :encoding           => nil,
-      :auto_reconnect     => true
+      :auto_reconnect     => true,
+      :skip_tls_on_proxy => false
     }
 
     class ReconnectLimitError < StandardError; end

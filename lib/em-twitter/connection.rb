@@ -42,7 +42,7 @@ module EventMachine
       # Called after the connection to the server is completed. Initiates a
       #
       def connection_completed
-        start_tls(@options[:ssl]) if ssl?
+        start_tls(@options[:ssl]) if should_start_tls?
 
         reset_connection
 
@@ -249,6 +249,14 @@ module EventMachine
 
       def verify_peer?
         ssl? && @options[:ssl][:verify_peer]
+      end
+
+      def proxy?
+        @options[:proxy]
+      end
+
+       def should_start_tls?
+        (ssl? && !proxy?) || (ssl? && proxy? && ! true.eql?(@options[:skip_tls_on_proxy]) )
       end
 
       # Handles reconnection to the server when a disconnect occurs. By using a
