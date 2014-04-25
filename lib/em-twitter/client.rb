@@ -32,6 +32,7 @@ module EventMachine
       end
 
       def initialize(options = {})
+        puts "CLIENT OPTIONS #{options.inspect}"
         @options = DEFAULT_CONNECTION_OPTIONS.merge(options)
 
         validate_client

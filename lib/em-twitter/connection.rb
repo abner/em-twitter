@@ -42,12 +42,16 @@ module EventMachine
       # Called after the connection to the server is completed. Initiates a
       #
       def connection_completed
+        puts "CONNECTION COMPLETED"
         start_tls(@options[:ssl]) if should_start_tls?
-
         reset_connection
 
         @request = Request.new(@options)
         send_data(@request)
+      end
+
+      def should_start_tls?
+        (ssl? && !proxy?) || (ssl? && proxy? && ! true.eql?(@options[:skip_tls_on_proxy]) )
       end
 
       def post_init
@@ -243,20 +247,16 @@ module EventMachine
         @options[:ssl]
       end
 
+      def proxy?
+        @options[:proxy]
+      end
+
       def gzip?
         @headers['Content-Encoding'] && @headers['Content-Encoding'] == 'gzip'
       end
 
       def verify_peer?
         ssl? && @options[:ssl][:verify_peer]
-      end
-
-      def proxy?
-        @options[:proxy]
-      end
-
-       def should_start_tls?
-        (ssl? && !proxy?) || (ssl? && proxy? && ! true.eql?(@options[:skip_tls_on_proxy]) )
       end
 
       # Handles reconnection to the server when a disconnect occurs. By using a
